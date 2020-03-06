@@ -1,0 +1,11 @@
+Optimize:
+amount of fuel used to reach 0 velocity
+the velocity when it touches the ground
+						the time required to land
+
+
+
+Genes:
+Force of the engine()
+Judgement (distance from the ground that it starts the burn)
+Starting amount of fuel (fuel adds weight)

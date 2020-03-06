@@ -1,0 +1,4 @@
+sceneSetups:
+- path: Assets/Scenes/Jumping_GA_Scene.unity
+  isLoaded: 1
+  isActive: 1

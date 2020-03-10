@@ -96,8 +96,8 @@ public class Hoverslam : MonoBehaviour
         DNA<float> dna = geneticAglorithm.Population[index];
         float finalVelocity = factory.ships[index].GetComponent<Engine>().finalVelocity;
         score = finalVelocity;
-        score += factory.ships[index].GetComponent<Engine>().fuelBurned / 2.0f;
-        score += factory.ships[index].GetComponent<Engine>().stopHeight / 3.0f;
+        //score += factory.ships[index].GetComponent<Engine>().fuelBurned / 2.0f;
+        //score += factory.ships[index].GetComponent<Engine>().stopHeight / 3.0f;
         return score;
     }
 }

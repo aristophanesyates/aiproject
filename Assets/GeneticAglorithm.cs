@@ -14,8 +14,13 @@ public class GeneticAglorithm<T> {
 
     private Random random;
 	private float fitnessSum;
+    private enum METHOD
+    {
+        TWOBEST, EVERYONEABOVETHEMEDIANISSEXY
+    }
+    private METHOD method = METHOD.EVERYONEABOVETHEMEDIANISSEXY;
 
-	public GeneticAglorithm(int populationSize, int dnaSize, Func<int, float> getRandomGene, Func<int, float> fitnessFunction, float mutationRate, float mutationVariance = 0.5f, bool shouldInitGenes = true)
+    public GeneticAglorithm(int populationSize, int dnaSize, Func<int, float> getRandomGene, Func<int, float> fitnessFunction, float mutationRate, float mutationVariance = 0.5f, bool shouldInitGenes = true)
 	{
 		Generation = 1;
         MutationRate = mutationRate;
@@ -54,7 +59,8 @@ public class GeneticAglorithm<T> {
         );
         if (Generation != 1)
         {
-            string test = "children-of-2-best-parents";
+            string test = "above-medians-only";
+            string baseDir = "M:\\aiproject\\";
             string printString;
             string fitnessString;
             string thrustString;
@@ -72,7 +78,7 @@ public class GeneticAglorithm<T> {
                 printString += ("   Judgement Height=" + judgementString);
                 printString += ("  Starting Fuel=" + fuelString);
                 UnityEngine.Debug.Log(printString);
-                WriteToFile(fitnessString, thrustString, judgementString, fuelString, "C:\\Users\\Sirius\\Desktop\\aiproject\\" + test + "\\worst.csv");
+                WriteToFile(fitnessString, thrustString, judgementString, fuelString, baseDir + test + "\\worst.csv");
             }
 
             {
@@ -90,7 +96,7 @@ public class GeneticAglorithm<T> {
                 printString += ("   Judgement Height=" + judgementString);
                 printString += ("  Starting Fuel=" + fuelString);
                 UnityEngine.Debug.Log(printString);
-                WriteToFile(fitnessString, thrustString, judgementString, fuelString, "C:\\Users\\Sirius\\Desktop\\aiproject\\" + test + "\\median.csv");
+                WriteToFile(fitnessString, thrustString, judgementString, fuelString, baseDir + test + "\\median.csv");
             }
 
             {
@@ -104,7 +110,7 @@ public class GeneticAglorithm<T> {
                 printString += ("   Judgement Height=" + judgementString);
                 printString += ("  Starting Fuel=" + fuelString);
                 UnityEngine.Debug.Log(printString);
-                WriteToFile(fitnessString, thrustString, judgementString, fuelString, "C:\\Users\\Sirius\\Desktop\\aiproject\\" + test + "\\second.csv");
+                WriteToFile(fitnessString, thrustString, judgementString, fuelString, baseDir + test + "\\second.csv");
             }
 
             {
@@ -118,7 +124,7 @@ public class GeneticAglorithm<T> {
                 printString += ("   Judgement Height=" + judgementString);
                 printString += ("  Starting Fuel=" + fuelString);
                 UnityEngine.Debug.Log(printString);
-                WriteToFile(fitnessString, thrustString, judgementString, fuelString, "C:\\Users\\Sirius\\Desktop\\aiproject\\" + test + "\\first.csv");
+                WriteToFile(fitnessString, thrustString, judgementString, fuelString, baseDir + test + "\\first.csv");
             }
         }
         for (int i = 0; i < Population.Count; i++)
@@ -131,9 +137,26 @@ public class GeneticAglorithm<T> {
             //UnityEngine.Debug.Log(printString);
             //DNA<T> parent1 = ChooseParent();
             //DNA<T> parent2 = ChooseParent();
-            DNA<T> parent1 = Population[Population.Count-1];
-            DNA<T> parent2 = Population[Population.Count-2];
 
+            DNA<T> parent1;
+            DNA<T> parent2;
+            if (method == METHOD.TWOBEST)
+            {
+                parent1 = Population[Population.Count - 1];
+                parent2 = Population[Population.Count - 2];
+            }
+            else if (method == METHOD.EVERYONEABOVETHEMEDIANISSEXY)
+            {
+                int index = Population.Count - 1;
+                index -= i / 2;
+                parent1 = Population[index];
+                parent2 = ChooseParent(method);
+            }
+            else
+            {
+                parent1 = Population[Population.Count - 1];
+                parent2 = Population[Population.Count - 2];
+            }
 
             DNA<T> child = parent1.Crossover(parent2);
 
@@ -167,21 +190,28 @@ public class GeneticAglorithm<T> {
 		best.Genes.CopyTo(BestGenes, 0);
 	}
 
-	private DNA<T> ChooseParent()
+	private DNA<T> ChooseParent(METHOD method)
 	{
-        return Population[1];
-        //double randomNumber = random.NextDouble() * fitnessSum;
+        if (method == METHOD.EVERYONEABOVETHEMEDIANISSEXY)
+        {
+            int index = UnityEngine.Random.Range((int)(Population.Count/2) - 1, (Population.Count) - 1);
+            return Population[index];
+        }
+        else
+        {
+            double randomNumber = random.NextDouble() * fitnessSum;
 
-        //for(int i = 0; i < Population.Count; i++)
-        //{
-        //	if( randomNumber < Population[i].Fitness)
-        //	{
-        //		return Population[i];
-        //	}
+            for (int i = 0; i < Population.Count; i++)
+            {
+                if (randomNumber < Population[i].Fitness)
+                {
+                    return Population[i];
+                }
 
-        //	randomNumber -= Population[i].Fitness;
-        //}
+                randomNumber -= Population[i].Fitness;
+            }
 
-        //return Population[random.Next(0, Population.Count)];
+            return Population[random.Next(0, Population.Count)];
+        }
     }
 }

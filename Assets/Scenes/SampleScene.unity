@@ -149,11 +149,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 19d844a5c2f372b45b05c7d686f0230d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  gensFinished: -1
+  maxGens: 30
   started: 1
   factory: {fileID: 898920892}
-  mutationRate: 0.05
-  mutationVariance: 0.2
-  timeScale: 2
+  mutationRate: 0.4
+  mutationVariance: 0.3
+  timeScale: 8
   highestPossibleThrust: 8
   fuelTankCapacity: 20
 --- !u!4 &254366330

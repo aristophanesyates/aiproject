@@ -7,6 +7,7 @@ public class Engine : MonoBehaviour
     public bool landed = false;
     public float fuelBurned;
     public float finalVelocity;
+    public float stopHeight;
     private float shipWeight;
     Renderer boy;
     // genes
@@ -39,6 +40,7 @@ public class Engine : MonoBehaviour
         stopBurn = false;
         landed = false;
         rigidBody.velocity = new Vector3(0f, 0f, 0f);
+        stopHeight = 0.0f;
     }
     public void SetGene(float geneValue, int geneIndex)
     {
@@ -69,6 +71,7 @@ public class Engine : MonoBehaviour
         lastHeight = heightTransform.position.y + 1f;
         currentThrust = 0f;
         stopBurn = false;
+        stopHeight = 0.0f;
         up = transform.up;
         boy = GetComponent<MeshRenderer>();
     }
@@ -85,6 +88,7 @@ public class Engine : MonoBehaviour
         if (!stopBurn && (lastHeight < heightTransform.position.y || fuelBurned > startingFuel))
         {
             stopBurn = true;
+            stopHeight = heightTransform.position.y;
             //Debug.Log("Ship stopped at height: " + heightTransform.position.y.ToString());
         }
         float deltaTime = Time.deltaTime;
@@ -112,6 +116,10 @@ public class Engine : MonoBehaviour
             finalVelocity = currentVelocity;
         }
         stopBurn = true;
+        if (stopHeight != 0.0f)
+        {
+            stopHeight = 10.0f;
+        }
         landed = true;
     }
 }

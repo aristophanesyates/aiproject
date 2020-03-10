@@ -5,6 +5,8 @@ using UnityEngine.UI;
 
 public class Hoverslam : MonoBehaviour
 {
+    public int gensFinished;
+    public int maxGens;
     public bool started = false;
     private int dnaSize = 3;
     [SerializeField] private Factory factory;
@@ -50,7 +52,7 @@ public class Hoverslam : MonoBehaviour
                 break;
             }
         }
-        if (allLanded)
+        if (allLanded && gensFinished != maxGens)
         {
             for (int shipIndex = 0; shipIndex < factory.ships.Count; shipIndex++)
             {
@@ -64,6 +66,7 @@ public class Hoverslam : MonoBehaviour
                 engine.Reset();
             }
             geneticAglorithm.NewGeneration();
+            gensFinished++;
         }
         //geneticAglorithm.NewGeneration();
         //bestJump = geneticAglorithm.BestFitness;
@@ -93,6 +96,8 @@ public class Hoverslam : MonoBehaviour
         DNA<float> dna = geneticAglorithm.Population[index];
         float finalVelocity = factory.ships[index].GetComponent<Engine>().finalVelocity;
         score = finalVelocity;
+        score += factory.ships[index].GetComponent<Engine>().fuelBurned / 2.0f;
+        score += factory.ships[index].GetComponent<Engine>().stopHeight / 3.0f;
         return score;
     }
 }

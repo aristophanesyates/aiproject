@@ -46,15 +46,45 @@ public class GeneticAglorithm<T> {
                 return a.Fitness > b.Fitness ? -1 : 1;
             }
         );
+        if (Generation != 1)
+        {
+            string printString;
+            printString = ("Worst:  Fitness=" + ((float)((int)(Population[0].Fitness * 100)) / 100).ToString());
+            printString += ("    Peak Thrust=" + ((float)((int)(Population[0].Genes[0] * 100)) / 100).ToString());
+            printString += ("   Judgement Height=" + ((float)((int)(Population[0].Genes[1] * 100)) / 100));
+            printString += ("  Starting Fuel=" + ((float)((int)(Population[0].Genes[2] * 100)) / 100));
+            UnityEngine.Debug.Log(printString);
 
+            float medianFitness = (Population[(Population.Count / 2) - 1].Fitness + Population[(Population.Count / 2) - 0].Fitness) / 2;
+            float medianGene0 = (Population[(Population.Count / 2) - 1].Genes[0] + Population[(Population.Count / 2) - 0].Genes[0]) / 2;
+            float medianGene1 = (Population[(Population.Count / 2) - 1].Genes[1] + Population[(Population.Count / 2) - 0].Genes[1]) / 2;
+            float medianGene2 = (Population[(Population.Count / 2) - 1].Genes[2] + Population[(Population.Count / 2) - 0].Genes[2]) / 2;
+            printString = ("Median: Fitness=" + ((float)((int)(medianFitness * 100)) / 100).ToString());
+            printString += ("    Peak Thrust=" + ((float)((int)(medianGene0 * 100)) / 100).ToString());
+            printString += ("   Judgement Height=" + ((float)((int)(medianGene1 * 100)) / 100));
+            printString += ("  Starting Fuel=" + ((float)((int)(medianGene2 * 100)) / 100));
+            UnityEngine.Debug.Log(printString);
+
+            printString = ("Second: Fitness=" + ((float)((int)(Population[Population.Count - 2].Fitness * 100)) / 100).ToString());
+            printString += ("    Peak Thrust=" + ((float)((int)(Population[Population.Count - 2].Genes[0] * 100)) / 100).ToString());
+            printString += ("   Judgement Height=" + ((float)((int)(Population[Population.Count - 2].Genes[1] * 100)) / 100));
+            printString += ("  Starting Fuel=" + ((float)((int)(Population[Population.Count - 2].Genes[2] * 100)) / 100));
+            UnityEngine.Debug.Log(printString);
+
+            printString = ("First:  Fitness=" + ((float)((int)(Population[Population.Count - 1].Fitness * 100)) / 100).ToString());
+            printString += ("    Peak Thrust=" + ((float)((int)(Population[Population.Count - 1].Genes[0] * 100)) / 100).ToString());
+            printString += ("   Judgement Height=" + ((float)((int)(Population[Population.Count - 1].Genes[1] * 100)) / 100));
+            printString += ("  Starting Fuel=" + ((float)((int)(Population[Population.Count - 1].Genes[2] * 100)) / 100));
+            UnityEngine.Debug.Log(printString);
+        }
         for (int i = 0; i < Population.Count; i++)
 		{
-            string printString;
-            printString = ("Fitness=" + ((float)((int)(Population[i].Fitness * 100)) / 100).ToString());
-            printString += ("    Peak Thrust=" + ((float)((int)(Population[i].Genes[0] * 100)) / 100).ToString());
-            printString += ("   Judgement Height=" + ((float)((int)(Population[i].Genes[1] * 100)) / 100));
-            printString += ("  Starting Fuel=" + ((float)((int)(Population[i].Genes[2] * 100))));
-            UnityEngine.Debug.Log(printString);
+            //string printString;
+            //printString = ("Fitness=" + ((float)((int)(Population[i].Fitness * 100)) / 100).ToString());
+            //printString += ("    Peak Thrust=" + ((float)((int)(Population[i].Genes[0] * 100)) / 100).ToString());
+            //printString += ("   Judgement Height=" + ((float)((int)(Population[i].Genes[1] * 100)) / 100));
+            //printString += ("  Starting Fuel=" + ((float)((int)(Population[i].Genes[2] * 100)) / 100));
+            //UnityEngine.Debug.Log(printString);
             //DNA<T> parent1 = ChooseParent();
             //DNA<T> parent2 = ChooseParent();
             DNA<T> parent1 = Population[Population.Count-1];

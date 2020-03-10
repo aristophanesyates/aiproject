@@ -29,8 +29,14 @@ public class GeneticAglorithm<T> {
 			Population.Add(new DNA<T>(dnaSize, getRandomGene, fitnessFunction, shouldInitGenes: true));
 		}
 	}
-
-	public void NewGeneration()
+    public static void WriteToFile(string resultA, string resultB, string resultC, string resultD, string filePath = "C:\\Users\\Sirius\\Desktop\\aiproject\\csv\\csv.csv")
+    {
+        using (System.IO.StreamWriter file = new System.IO.StreamWriter(filePath, true))
+        {
+            file.WriteLine(resultA + "," + resultB + "," + resultC + "," + resultD);
+        }
+    }
+    public void NewGeneration()
     {
         if (Population.Count <= 0) {
 			return;
@@ -48,34 +54,72 @@ public class GeneticAglorithm<T> {
         );
         if (Generation != 1)
         {
+            string test = "children-of-2-best-parents";
             string printString;
-            printString = ("Worst:  Fitness=" + ((float)((int)(Population[0].Fitness * 100)) / 100).ToString());
-            printString += ("    Peak Thrust=" + ((float)((int)(Population[0].Genes[0] * 100)) / 100).ToString());
-            printString += ("   Judgement Height=" + ((float)((int)(Population[0].Genes[1] * 100)) / 100));
-            printString += ("  Starting Fuel=" + ((float)((int)(Population[0].Genes[2] * 100)) / 100));
-            UnityEngine.Debug.Log(printString);
+            string fitnessString;
+            string thrustString;
+            string judgementString;
+            string fuelString;
 
-            float medianFitness = (Population[(Population.Count / 2) - 1].Fitness + Population[(Population.Count / 2) - 0].Fitness) / 2;
-            float medianGene0 = (Population[(Population.Count / 2) - 1].Genes[0] + Population[(Population.Count / 2) - 0].Genes[0]) / 2;
-            float medianGene1 = (Population[(Population.Count / 2) - 1].Genes[1] + Population[(Population.Count / 2) - 0].Genes[1]) / 2;
-            float medianGene2 = (Population[(Population.Count / 2) - 1].Genes[2] + Population[(Population.Count / 2) - 0].Genes[2]) / 2;
-            printString = ("Median: Fitness=" + ((float)((int)(medianFitness * 100)) / 100).ToString());
-            printString += ("    Peak Thrust=" + ((float)((int)(medianGene0 * 100)) / 100).ToString());
-            printString += ("   Judgement Height=" + ((float)((int)(medianGene1 * 100)) / 100));
-            printString += ("  Starting Fuel=" + ((float)((int)(medianGene2 * 100)) / 100));
-            UnityEngine.Debug.Log(printString);
+            {
+                fitnessString = ((float)((int)(Population[0].Fitness * 100)) / 100).ToString();
+                thrustString = ((float)((int)(Population[0].Genes[0] * 100)) / 100).ToString();
+                judgementString = ((float)((int)(Population[0].Genes[1] * 100)) / 100).ToString();
+                fuelString = ((float)((int)(Population[0].Genes[2] * 100)) / 100).ToString();
 
-            printString = ("Second: Fitness=" + ((float)((int)(Population[Population.Count - 2].Fitness * 100)) / 100).ToString());
-            printString += ("    Peak Thrust=" + ((float)((int)(Population[Population.Count - 2].Genes[0] * 100)) / 100).ToString());
-            printString += ("   Judgement Height=" + ((float)((int)(Population[Population.Count - 2].Genes[1] * 100)) / 100));
-            printString += ("  Starting Fuel=" + ((float)((int)(Population[Population.Count - 2].Genes[2] * 100)) / 100));
-            UnityEngine.Debug.Log(printString);
+                printString = ("Worst:  Fitness=" + fitnessString);
+                printString += ("    Peak Thrust=" + thrustString);
+                printString += ("   Judgement Height=" + judgementString);
+                printString += ("  Starting Fuel=" + fuelString);
+                UnityEngine.Debug.Log(printString);
+                WriteToFile(fitnessString, thrustString, judgementString, fuelString, "C:\\Users\\Sirius\\Desktop\\aiproject\\" + test + "\\worst.csv");
+            }
 
-            printString = ("First:  Fitness=" + ((float)((int)(Population[Population.Count - 1].Fitness * 100)) / 100).ToString());
-            printString += ("    Peak Thrust=" + ((float)((int)(Population[Population.Count - 1].Genes[0] * 100)) / 100).ToString());
-            printString += ("   Judgement Height=" + ((float)((int)(Population[Population.Count - 1].Genes[1] * 100)) / 100));
-            printString += ("  Starting Fuel=" + ((float)((int)(Population[Population.Count - 1].Genes[2] * 100)) / 100));
-            UnityEngine.Debug.Log(printString);
+            {
+                float medianFitness = (Population[(Population.Count / 2) - 1].Fitness + Population[(Population.Count / 2) - 0].Fitness) / 2;
+                float medianGene0 = (Population[(Population.Count / 2) - 1].Genes[0] + Population[(Population.Count / 2) - 0].Genes[0]) / 2;
+                float medianGene1 = (Population[(Population.Count / 2) - 1].Genes[1] + Population[(Population.Count / 2) - 0].Genes[1]) / 2;
+                float medianGene2 = (Population[(Population.Count / 2) - 1].Genes[2] + Population[(Population.Count / 2) - 0].Genes[2]) / 2;
+                fitnessString = ((float)((int)(medianFitness * 100)) / 100).ToString();
+                thrustString = ((float)((int)(medianGene0 * 100)) / 100).ToString();
+                judgementString = ((float)((int)(medianGene1 * 100)) / 100).ToString();
+                fuelString = ((float)((int)(medianGene2 * 100)) / 100).ToString();
+
+                printString = ("Median:  Fitness=" + fitnessString);
+                printString += ("    Peak Thrust=" + thrustString);
+                printString += ("   Judgement Height=" + judgementString);
+                printString += ("  Starting Fuel=" + fuelString);
+                UnityEngine.Debug.Log(printString);
+                WriteToFile(fitnessString, thrustString, judgementString, fuelString, "C:\\Users\\Sirius\\Desktop\\aiproject\\" + test + "\\median.csv");
+            }
+
+            {
+                fitnessString = ((float)((int)(Population[Population.Count - 2].Fitness * 100)) / 100).ToString();
+                thrustString = ((float)((int)(Population[Population.Count - 2].Genes[0] * 100)) / 100).ToString();
+                judgementString = ((float)((int)(Population[Population.Count - 2].Genes[1] * 100)) / 100).ToString();
+                fuelString = ((float)((int)(Population[Population.Count - 2].Genes[2] * 100)) / 100).ToString();
+
+                printString = ("Second:  Fitness=" + fitnessString);
+                printString += ("    Peak Thrust=" + thrustString);
+                printString += ("   Judgement Height=" + judgementString);
+                printString += ("  Starting Fuel=" + fuelString);
+                UnityEngine.Debug.Log(printString);
+                WriteToFile(fitnessString, thrustString, judgementString, fuelString, "C:\\Users\\Sirius\\Desktop\\aiproject\\" + test + "\\second.csv");
+            }
+
+            {
+                fitnessString = ((float)((int)(Population[Population.Count - 1].Fitness * 100)) / 100).ToString();
+                thrustString = ((float)((int)(Population[Population.Count - 1].Genes[0] * 100)) / 100).ToString();
+                judgementString = ((float)((int)(Population[Population.Count - 1].Genes[1] * 100)) / 100).ToString();
+                fuelString = ((float)((int)(Population[Population.Count - 1].Genes[2] * 100)) / 100).ToString();
+
+                printString = ("First:  Fitness=" + fitnessString);
+                printString += ("    Peak Thrust=" + thrustString);
+                printString += ("   Judgement Height=" + judgementString);
+                printString += ("  Starting Fuel=" + fuelString);
+                UnityEngine.Debug.Log(printString);
+                WriteToFile(fitnessString, thrustString, judgementString, fuelString, "C:\\Users\\Sirius\\Desktop\\aiproject\\" + test + "\\first.csv");
+            }
         }
         for (int i = 0; i < Population.Count; i++)
 		{

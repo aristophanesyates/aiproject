@@ -155,7 +155,7 @@ MonoBehaviour:
   factory: {fileID: 898920892}
   mutationRate: 0.4
   mutationVariance: 0.3
-  timeScale: 8
+  timeScale: 1
   highestPossibleThrust: 8
   fuelTankCapacity: 20
 --- !u!4 &254366330

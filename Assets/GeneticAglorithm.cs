@@ -16,9 +16,10 @@ public class GeneticAglorithm<T> {
 	private float fitnessSum;
     private enum METHOD
     {
-        TWOBEST, EVERYONEABOVETHEMEDIANISSEXY
+        TWOBEST, ABOVEMEDIANONLY, ABOVEMEDIANSANDBEST, ROULETTEWHEEL
     }
-    private METHOD method = METHOD.EVERYONEABOVETHEMEDIANISSEXY;
+    private METHOD method = METHOD.TWOBEST;
+    SortedDictionary<METHOD, string> tests;
 
     public GeneticAglorithm(int populationSize, int dnaSize, Func<int, float> getRandomGene, Func<int, float> fitnessFunction, float mutationRate, float mutationVariance = 0.5f, bool shouldInitGenes = true)
 	{
@@ -33,7 +34,12 @@ public class GeneticAglorithm<T> {
 		{
 			Population.Add(new DNA<T>(dnaSize, getRandomGene, fitnessFunction, shouldInitGenes: true));
 		}
-	}
+        tests = new SortedDictionary<METHOD, string>();
+        tests.Add(METHOD.TWOBEST, "two-best");
+        tests.Add(METHOD.ABOVEMEDIANONLY, "above-medians-only");
+        tests.Add(METHOD.ABOVEMEDIANSANDBEST, "above-medians-and-best");
+        tests.Add(METHOD.ROULETTEWHEEL, "roulette-wheel");
+    }
     public static void WriteToFile(string resultA, string resultB, string resultC, string resultD, string filePath = "C:\\Users\\Sirius\\Desktop\\aiproject\\csv\\csv.csv")
     {
         using (System.IO.StreamWriter file = new System.IO.StreamWriter(filePath, true))
@@ -59,8 +65,10 @@ public class GeneticAglorithm<T> {
         );
         if (Generation != 1)
         {
-            string test = "above-medians-only";
-            string baseDir = "M:\\aiproject\\";
+            string test = tests[method];
+            string baseDirUni = "M:\\aiproject\\";
+            string baseDirLaptop = "C:\\Users\\Sirius\\Desktop\\aiproject\\";
+            string baseDir = baseDirLaptop;
             string printString;
             string fitnessString;
             string thrustString;
@@ -145,11 +153,22 @@ public class GeneticAglorithm<T> {
                 parent1 = Population[Population.Count - 1];
                 parent2 = Population[Population.Count - 2];
             }
-            else if (method == METHOD.EVERYONEABOVETHEMEDIANISSEXY)
+            else if (method == METHOD.ABOVEMEDIANONLY)
             {
-                int index = Population.Count - 1;
-                index -= i / 2;
-                parent1 = Population[index];
+                //int index = Population.Count - 1;
+                //index -= i / 2;
+                //parent1 = Population[index];
+                parent1 = ChooseParent(method);
+                parent2 = ChooseParent(method);
+            }
+            else if (method == METHOD.ROULETTEWHEEL)
+            {
+                parent1 = ChooseParent(method);
+                parent2 = ChooseParent(method);
+            }
+            else if (method == METHOD.ABOVEMEDIANSANDBEST)
+            {
+                parent1 = Population[Population.Count - 1];
                 parent2 = ChooseParent(method);
             }
             else
@@ -191,10 +210,27 @@ public class GeneticAglorithm<T> {
 	}
 
 	private DNA<T> ChooseParent(METHOD method)
-	{
-        if (method == METHOD.EVERYONEABOVETHEMEDIANISSEXY)
+    {
+        if (method == METHOD.ABOVEMEDIANONLY || method == METHOD.ABOVEMEDIANSANDBEST)
         {
-            int index = UnityEngine.Random.Range((int)(Population.Count/2) - 1, (Population.Count) - 1);
+            int index = UnityEngine.Random.Range((int)(Population.Count / 2) - 1, (Population.Count) - 1);
+            return Population[index];
+        }
+        if (method == METHOD.ROULETTEWHEEL)
+        {
+            float rouletteSlice = UnityEngine.Random.Range(0f, fitnessSum);
+            int index = 0;
+            // need to decrement because high fitness is "bad" in this implementation
+            float currentTotal = fitnessSum;
+            for (int i= 0; i < Population.Count; i++)
+            {
+                currentTotal -= Population[i].Fitness;
+                if (currentTotal < rouletteSlice)
+                {
+                    index = i;
+                    break;
+                }
+            }
             return Population[index];
         }
         else

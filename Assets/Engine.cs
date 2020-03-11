@@ -9,7 +9,7 @@ public class Engine : MonoBehaviour
     public float finalVelocity;
     public float stopHeight;
     private float shipWeight;
-    Renderer boy;
+    Renderer render;
     // genes
     [SerializeField] private float peakThrust;              // force in mega-newtons the engine can apply
     [SerializeField] private float burnStartHeight;         // the height the burn should start
@@ -73,17 +73,14 @@ public class Engine : MonoBehaviour
         stopBurn = false;
         stopHeight = 0.0f;
         up = transform.up;
-        boy = GetComponent<MeshRenderer>();
+        render = GetComponent<MeshRenderer>();
     }
     void FixedUpdate()
     {
-        currentVelocity = rigidBody.velocity.magnitude;
-        rigidBody.mass = Mathf.Min(GetFuelWeight(shipWeight + startingFuel - fuelBurned), shipWeight);
-
-        boy.material.color = Color.Lerp(Color.white, Color.blue, currentThrust / Mathf.Max(peakThrust, 0.00001f));
+        render.material.color = Color.Lerp(Color.white, Color.blue, currentThrust / Mathf.Max(peakThrust, 0.00001f));
         if (stopBurn)
         {
-            boy.material.color = Color.red;
+            render.material.color = Color.red;
         }
         if (!stopBurn && (lastHeight < heightTransform.position.y || fuelBurned > startingFuel))
         {
@@ -91,6 +88,18 @@ public class Engine : MonoBehaviour
             stopHeight = heightTransform.position.y;
             //Debug.Log("Ship stopped at height: " + heightTransform.position.y.ToString());
         }
+        if (landed && finalVelocity > 17f)
+        {
+            render.material.color = Color.black;
+            //Debug.Log("Ship stopped at height: " + heightTransform.position.y.ToString());
+        }
+        if (landed)
+        {
+            return;
+        }
+        currentVelocity = rigidBody.velocity.magnitude;
+        rigidBody.mass = Mathf.Min(GetFuelWeight(shipWeight + startingFuel - fuelBurned), shipWeight);
+
         float deltaTime = Time.deltaTime;
         if (heightTransform.position.y <= burnStartHeight && !stopBurn)
         {
@@ -115,11 +124,11 @@ public class Engine : MonoBehaviour
         {
             finalVelocity = currentVelocity;
         }
-        stopBurn = true;
-        if (stopHeight != 0.0f)
+        if (!stopBurn)
         {
-            stopHeight = 10.0f;
+            stopHeight = 133.3333f;
         }
+        stopBurn = true;
         landed = true;
     }
 }

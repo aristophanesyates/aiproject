@@ -62,11 +62,16 @@ public class Hoverslam : MonoBehaviour
                     engine.SetGene(geneticAglorithm.Population[shipIndex].Genes[geneIndex], geneIndex);
                 }
                 Transform shipTransform = factory.ships[shipIndex].transform;
-                shipTransform.position = new Vector3 (shipTransform.position.x, factory.startY, shipTransform.position.z);
-                engine.Reset();
+                shipTransform.position = new Vector3(shipTransform.position.x, factory.startY, shipTransform.position.z);
             }
             geneticAglorithm.NewGeneration();
             gensFinished++;
+
+            for (int shipIndex = 0; shipIndex < factory.ships.Count; shipIndex++)
+            {
+                Engine engine = factory.ships[shipIndex].GetComponent<Engine>();
+                engine.Reset();
+            }
         }
         //geneticAglorithm.NewGeneration();
         //bestJump = geneticAglorithm.BestFitness;
@@ -96,8 +101,7 @@ public class Hoverslam : MonoBehaviour
         DNA<float> dna = geneticAglorithm.Population[index];
         float finalVelocity = factory.ships[index].GetComponent<Engine>().finalVelocity;
         score = finalVelocity;
-        //score += factory.ships[index].GetComponent<Engine>().fuelBurned / 2.0f;
-        //score += factory.ships[index].GetComponent<Engine>().stopHeight / 3.0f;
+        score += factory.ships[index].GetComponent<Engine>().fuelBurned / 2.0f;
         return score;
     }
 }

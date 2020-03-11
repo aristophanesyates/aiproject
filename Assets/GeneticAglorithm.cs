@@ -18,7 +18,7 @@ public class GeneticAglorithm<T> {
     {
         TWOBEST, ABOVEMEDIANONLY, ABOVEMEDIANSANDBEST, ROULETTEWHEEL
     }
-    private METHOD method = METHOD.TWOBEST;
+    private METHOD method = METHOD.ABOVEMEDIANSANDBEST;
     SortedDictionary<METHOD, string> tests;
 
     public GeneticAglorithm(int populationSize, int dnaSize, Func<int, float> getRandomGene, Func<int, float> fitnessFunction, float mutationRate, float mutationVariance = 0.5f, bool shouldInitGenes = true)
@@ -68,7 +68,7 @@ public class GeneticAglorithm<T> {
             string test = tests[method];
             string baseDirUni = "M:\\aiproject\\";
             string baseDirLaptop = "C:\\Users\\Sirius\\Desktop\\aiproject\\";
-            string baseDir = baseDirLaptop;
+            string baseDir = baseDirUni;
             string printString;
             string fitnessString;
             string thrustString;
